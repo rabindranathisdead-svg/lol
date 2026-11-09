@@ -1,0 +1,144 @@
+E10.1
+c
+#include <stdio.h>
+
+int main(void)
+{
+    double x, total = 0;
+    int count = 0;
+
+    printf("Enter values, negative to stop: ");
+    scanf("%lf", &x);
+    while (x >= 0) {
+        total = total + x;
+        count = count + 1;
+        scanf("%lf", &x);
+    }
+
+    if (count > 0) {
+        printf("Count   %d\n", count);
+        printf("Total   %.2f\n", total);
+        printf("Average %.2f\n", total / count);
+    } else
+        printf("No values were entered.\n");
+    return 0;
+}
+
+Input 5 3 -1 gives Count 2, Total 8.00, Average 4.00. Input -1 prints “No values were entered.”
+
+M10.1
+c
+#include <stdio.h>
+
+int main(void)
+{
+    int choice, a, b;
+
+    do {
+        printf("\n1. Add\n2. Subtract\n3. Quit\nChoice: ");
+        scanf("%d", &choice);
+        switch (choice) {
+        case 1:
+            printf("Enter two integers: ");
+            scanf("%d %d", &a, &b);
+            printf("Sum = %d\n", a + b);
+            break;
+        case 2:
+            printf("Enter two integers: ");
+            scanf("%d %d", &a, &b);
+            printf("Difference = %d\n", a - b);
+            break;
+        case 3:
+            printf("Goodbye.\n");
+            break;
+        default:
+            printf("%d is not a valid choice.\n", choice);
+        }
+    } while (choice != 3);
+    return 0;
+}
+
+Choice 9 prints the invalid message and the menu appears again. Only choice 3 ends the program. Replace the cases with your own E8.2 menu.
+
+M10.2
+c
+#include <stdio.h>
+
+int main(void)
+{
+    int N = 1234;               /* your ID digits 4-7 */
+    int r = N % 6 + 3;
+    int row, col, count = 0;
+
+    /* (a) table with heading row */
+    printf("%4s", "*");
+    for (col = 1; col <= r; col++)
+        printf("%4d", col);
+    printf("\n");
+    for (row = 1; row <= r; row++) {
+        printf("%4d", row);
+        for (col = 1; col <= r; col++) {
+            printf("%4d", row * col);
+            count = count + 1;
+        }
+        printf("\n");
+    }
+    printf("Inner body ran %d times (r x r = %d)\n\n", count, r * r);
+
+    /* (b) triangle */
+    for (row = 1; row <= r; row++) {
+        for (col = 1; col <= row; col++)
+            printf("*");
+        printf("\n");
+    }
+    printf("\n");
+
+    /* (c) upside down */
+    for (row = r; row >= 1; row--) {
+        for (col = 1; col <= row; col++)
+            printf("*");
+        printf("\n");
+    }
+    return 0;
+}
+
+For r = 7 the count printed is 49, which matches r × r. The heading row and the two triangles also print as expected.
+
+C10.1
+c
+#include <stdio.h>
+
+int main(void)
+{
+    int N = 1234;               /* your ID digits 4-7 */
+    int s = N % 100;
+    int guess, guesses = 0, done = 0;
+
+    while (!done) {
+        do {
+            printf("Guess (0-99): ");
+            scanf("%d", &guess);
+            if (guess < 0 || guess > 99)
+                printf("%d is out of range.\n", guess);
+        } while (guess < 0 || guess > 99);
+
+        guesses = guesses + 1;
+        if (guess == s) {
+            printf("Correct! Guesses: %d\n", guesses);
+            done = 1;
+        } else {
+            if (guess < s)
+                printf("Too low.\n");
+            else
+                printf("Too high.\n");
+            if (guesses == 10) {
+                printf("Out of guesses. The number was %d.\n", s);
+                done = 1;
+            }
+        }
+    }
+    return 0;
+}
+Winning run: the inputs 50, -5, 20, 34 gave Too high, out of range (not counted), Too low, then Correct with 3 guesses.
+Cap: ten wrong guesses printed “Out of guesses. The number was 34.”
+Break it on purpose: delete done = 1; in the correct-guess branch. The game then keeps asking after the right answer, and you stop it with Ctrl + C. gcc gives no warning for this, because while (!done) is legal C, as in Common Error 7. Record what you see on your own machine.
